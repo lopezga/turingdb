@@ -120,6 +120,23 @@ Puedes empaquetar los datos con `.venv/Scripts/python -m tools.portable export b
 
 Esta migración reconstruye las bases; no es una copia instantánea. Para conservar exactamente el entorno sin internet exporta además las imágenes con `docker image save` y cárgalas con `docker image load`. Para copias binarias, usa procedimientos oficiales de backup de cada motor con servicios detenidos y versiones idénticas; no copies carpetas de bases en ejecución. Las claves y contraseñas se configuran por separado.
 
+## Interfaces nativas de los motores
+
+Con los servicios arrancados, puedes explorar directamente las bases desde el navegador de Windows o Linux:
+
+| Dataset | Neo4j Browser | Conexión Bolt | TuringDB Visualizer |
+|---|---|---|---|
+| Offshore Leaks | http://localhost:7474 | bolt://localhost:7687 | http://localhost:8080 |
+| Epinions | http://localhost:7475 | bolt://localhost:7688 | http://localhost:8081 |
+
+En Neo4j usa el usuario `neo4j`, la contraseña `NEO4J_PASSWORD` de tu `.env` y la conexión Bolt de la fila correspondiente. Comprueba el puerto del formulario: Browser puede recordar una conexión anterior. En TuringDB selecciona el grafo `offshore` y pulsa **Load offshore** si aparece: ambos servicios conservan ese nombre interno, pero cada uno contiene su dataset independiente. No es necesario importar de nuevo los datos.
+
+Para ver un ejemplo de relaciones en cualquiera de las interfaces, ejecuta `MATCH (a:Record)-[r:LINK]->(b:Record) RETURN a, r, b LIMIT 25`. Son consolas nativas con capacidad de modificar datos; usa consultas de lectura para conservar la igualdad de la comparación. Las consultas ejecutadas allí también pueden calentar cachés o competir por recursos: finalízalas antes del benchmark.
+
+Los puertos se publican exclusivamente en `127.0.0.1`. Puedes cambiarlos con las variables de `.env.example`, sin modificar los puertos internos. Tras actualizar una instalación existente, ejecuta `docker compose --profile ai up -d --build` (añade `-p` si usas un nombre de proyecto propio). No uses `down -v`: las bases permanecen en sus volúmenes.
+
+La interfaz de TuringDB se inicia con `-ui`, según su [documentación oficial](https://docs.turingdb.ai/quickstart), y es independiente del visualizador común de nuestra aplicación.
+
 ## Visualización de resultados
 
 Cada motor ofrece las vistas **Tabla / Grafo** en los dos datasets. Se utiliza un visualizador SVG común integrado en la aplicación, con flechas de dirección, colores por tipo, zoom, desplazamiento, arrastre e inspección de propiedades. No requiere servicios de visualización ni librerías externas. No es una integración de las interfaces nativas de los fabricantes.

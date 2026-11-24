@@ -3,7 +3,7 @@ import signal
 import subprocess
 import threading
 
-subprocess.run(['turingdb', '-demon', '-i', '0.0.0.0', '-turing-dir', '/var/lib/turing'], check=True)
+subprocess.run(['turingdb', '-demon', '-ui', '-ui-port', '8080', '-i', '0.0.0.0', '-turing-dir', '/var/lib/turing'], check=True)
 stop = threading.Event()
 signal.signal(signal.SIGTERM, lambda *_: stop.set())
 signal.signal(signal.SIGINT, lambda *_: stop.set())
