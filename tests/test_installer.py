@@ -1,8 +1,18 @@
 import unittest
+from unittest.mock import patch
 import create
 
 
 class InstallerTests(unittest.TestCase):
+    def test_wsl_uses_existing_linux_docker(self):
+        with patch.object(create.os, 'name', 'posix'), patch.object(create.shutil, 'which', return_value='/usr/bin/docker'):
+            self.assertEqual(create.docker_path(), '/usr/bin/docker')
+
+    def test_missing_linux_docker_does_not_fall_back_to_desktop(self):
+        with patch.object(create.os, 'name', 'posix'), patch.object(create.shutil, 'which', return_value=None):
+            with self.assertRaisesRegex(ValueError, 'No se encuentra docker en el PATH de Linux/WSL'):
+                create.docker_path()
+
     def test_profile_uses_docker_memory(self):
         self.assertEqual(create.choose_profile(16 * create.GIB, 'auto'), 'full')
         self.assertEqual(create.choose_profile(12 * create.GIB, 'auto'), 'compact')

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Portable bootstrap. Host requires only Python 3.10+ and running Linux Docker."""
+"""Prepare the demo using existing Docker + Compose; never install Docker or WSL."""
 import argparse
 import json
 import os
@@ -22,12 +22,14 @@ def run(command, capture=False):
 
 def docker_path():
     executable = shutil.which('docker')
-    fallbacks = [Path('C:/Program Files/Docker/Docker/resources/bin/docker.exe'),
-                 Path(os.getenv('LOCALAPPDATA', '')) / 'Programs/DockerDesktop/resources/bin/docker.exe']
     if not executable and os.name == 'nt':
+        fallbacks = [Path('C:/Program Files/Docker/Docker/resources/bin/docker.exe'),
+                     Path(os.getenv('LOCALAPPDATA', '')) / 'Programs/DockerDesktop/resources/bin/docker.exe']
         executable = next((str(path) for path in fallbacks if path.is_file()), None)
     if not executable:
-        raise ValueError('Instala Docker Desktop (Windows/macOS) o Docker Engine + Compose (Linux). En Windows activa WSL2 y abre Docker Desktop.')
+        if os.name == 'nt':
+            raise ValueError('No se encuentra Docker en Windows. Si utilizas Docker Engine dentro de WSL, ejecuta python3 create.py desde esa distribución WSL. Este script no instala Docker Desktop.')
+        raise ValueError('No se encuentra docker en el PATH de Linux/WSL. Utiliza la distribución y el entorno donde funciona vuestro Docker Engine + Compose. Este script no instala Docker ni Docker Desktop.')
     return executable
 
 
@@ -62,13 +64,16 @@ def apply_resources(settings, profile, cpus):
 
 
 def main():
-    parser = argparse.ArgumentParser(description='Instala y arranca GraphScope conservando bases existentes.')
+    parser = argparse.ArgumentParser(description='Prepara y arranca GraphScope con Docker + Compose existentes; no instala Docker Desktop ni modifica WSL. Conserva bases existentes.')
     parser.add_argument('--check', action='store_true', help='Solo comprobar requisitos; no modifica archivos ni servicios.')
     parser.add_argument('--profile', choices=['auto', 'full', 'compact'], default='auto')
     parser.add_argument('--project', default=None, help='Proyecto Compose nuevo para una instalación aislada, por ejemplo graphscope-demo.')
     args = parser.parse_args()
     docker = docker_path()
-    info = json.loads(run([docker, 'info', '--format', '{{json .}}'], capture=True))
+    try:
+        info = json.loads(run([docker, 'info', '--format', '{{json .}}'], capture=True))
+    except subprocess.CalledProcessError as exc:
+        raise ValueError('No se puede acceder al motor Docker. Comprueba docker info en esta misma consola y el contexto/permisos autorizados por IT. No se instala ni inicia ningún motor automáticamente.') from exc
     if info.get('OSType') != 'linux':
         raise ValueError('Docker debe estar configurado para contenedores Linux.')
     run([docker, 'compose', 'version'], capture=True)

@@ -19,6 +19,37 @@ Clonar el código no elimina las descargas necesarias para instalar dependencias
 
 Para futuras actualizaciones, detén los servicios, ejecuta `git pull --ff-only` y arranca con `.\scripts\start.ps1`. Los datos y `.env` locales se conservan. Si una actualización cambia el formato de datos o el esquema, consulta sus instrucciones de migración antes de aplicarla.
 
+## WSL con Docker Engine existente (sin Docker Desktop)
+
+Ejecuta estos comandos dentro de la distribución WSL donde ya funcionan Docker y Compose. `create.py` no instala Docker Desktop, Docker Engine, WSL ni paquetes del anfitrión; tampoco cambia servicios del sistema ni opciones de arranque. Utiliza el motor del contexto Docker activo, por lo que debes comprobar que es el motor local autorizado para la demo.
+
+```bash
+git clone https://github.com/lopezga/turingdb.git
+cd turingdb
+docker context show
+docker info
+docker compose version
+python3 --version
+python3 create.py --check
+python3 create.py
+```
+
+Si ya lo habías clonado, utiliza `git pull --ff-only` en lugar de clonarlo otra vez. Se requiere Python 3.10 o posterior. Preferiblemente clona en una carpeta Linux como `~/proyectos/turingdb`. No ejecutes `install.cmd` ni `scripts/setup-windows.ps1` en este entorno: son entradas para preparar Windows con Docker Desktop.
+
+`--check` solo comprueba los requisitos previos: no escribe `.env`, descarga imágenes ni crea/arranca contenedores. La ejecución sin `--check` genera o adapta `.env`, construye imágenes, descarga datasets/modelo cuando faltan, crea volúmenes y arranca/verifica los servicios de la demo. No borra bases existentes. No modifica la configuración del motor Docker de empresa. La comprobación final de espacio en Docker se realiza después de construir las imágenes.
+
+Para evitar colisiones con otros proyectos Compose puedes indicar `--project graphscope-demo` en ambas invocaciones de `create.py`. Conserva el mismo nombre en comandos posteriores (`docker compose -p graphscope-demo ...`). Si los puertos 8000, 7474 o 7687 están ocupados, configura puertos libres en `.env` antes de instalar; el nombre del proyecto no cambia los puertos.
+
+En el uso diario, desde WSL y la carpeta del proyecto:
+
+```bash
+docker compose --profile ai up -d
+# Abrir http://localhost:8000 en el navegador de Windows.
+docker compose --profile ai stop
+```
+
+Estos comandos no detienen los proyectos de empresa ni el motor Docker compartido. No utilices `wsl --shutdown` para parar solo esta demo si hay otros proyectos trabajando dentro de WSL.
+
 ## Instalador completo para Windows
 
 En un PC Windows x64, copia la carpeta a una unidad local y ejecuta **install.cmd** (doble clic, PowerShell o CMD). No necesita que Python ni Docker esten instalados previamente:
