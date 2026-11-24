@@ -1,0 +1,5 @@
+FROM python:3.12-slim
+RUN pip install --no-cache-dir turingdb==3.1
+EXPOSE 6666
+COPY tools/turing_server.py /turing_server.py
+CMD ["python", "/turing_server.py"]

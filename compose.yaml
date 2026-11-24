@@ -1,0 +1,81 @@
+services:
+  neo4j: &neo4j-service
+    restart: "no"
+    image: neo4j:5.26.0-community
+    environment:
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:?Copy .env.example to .env}
+      NEO4J_server_memory_heap_initial__size: ${NEO4J_HEAP_INITIAL:-1G}
+      NEO4J_server_memory_heap_max__size: ${NEO4J_HEAP_MAX:-3G}
+      NEO4J_server_memory_pagecache_size: ${NEO4J_PAGECACHE:-3G}
+      NEO4J_db_transaction_timeout: 30s
+    mem_limit: ${ENGINE_MEMORY:-8g}
+    cpus: ${ENGINE_CPUS:-4}
+    ports: ["127.0.0.1:${NEO4J_HTTP_PORT:-7474}:7474", "127.0.0.1:${NEO4J_BOLT_PORT:-7687}:7687"]
+    volumes: ["neo4j-data:/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://localhost:7474 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+  turingdb: &turing-service
+    restart: "no"
+    build:
+      context: .
+      dockerfile: Dockerfile.turing
+    mem_limit: ${ENGINE_MEMORY:-8g}
+    cpus: ${ENGINE_CPUS:-4}
+    volumes:
+      - turing-data:/var/lib/turing
+      - ${DATA_DIR:-./data}/canonical:/var/lib/turing/data:ro
+  api:
+    restart: "no"
+    build: .
+    ports: ["127.0.0.1:${API_PORT:-8000}:8000"]
+    environment:
+      NEO4J_URI: bolt://neo4j:7687
+      NEO4J_SMALL_URI: bolt://neo4j-small:7687
+      NEO4J_PASSWORD: ${NEO4J_PASSWORD}
+      TURING_HOST: turingdb
+      TURING_SMALL_HOST: turingdb-small
+      NL_PROVIDER: ${NL_PROVIDER:-rules}
+      LLM_BASE_URL: ${LLM_BASE_URL:-http://ollama:11434}
+      OLLAMA_MODEL: ${OLLAMA_MODEL:-qwen2.5:3b}
+      LLM_MODEL: ${LLM_MODEL:-}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+      BENCH_ENGINE_MEMORY: ${ENGINE_MEMORY:-8g}
+      BENCH_ENGINE_CPUS: ${ENGINE_CPUS:-4}
+      BENCH_NEO4J_HEAP: ${NEO4J_HEAP_MAX:-3G}
+      BENCH_NEO4J_PAGECACHE: ${NEO4J_PAGECACHE:-3G}
+    volumes:
+      - ${DATA_DIR:-./data}:/app/data
+      - ./reports:/app/reports
+    depends_on:
+      neo4j:
+        condition: service_healthy
+      turingdb:
+        condition: service_started
+      neo4j-small:
+        condition: service_healthy
+      turingdb-small:
+        condition: service_started
+  neo4j-small:
+    <<: *neo4j-service
+    ports: []
+    volumes: ["neo4j-small-data:/data"]
+  turingdb-small:
+    <<: *turing-service
+    volumes:
+      - turing-small-data:/var/lib/turing
+      - ${DATA_DIR:-./data}/small:/var/lib/turing/data:ro
+  ollama:
+    restart: "no"
+    image: ollama/ollama:0.6.8
+    profiles: ["ai"]
+    mem_limit: 5g
+    volumes: ["ollama-data:/root/.ollama"]
+volumes:
+  neo4j-data:
+  turing-data:
+  ollama-data:
+  neo4j-small-data:
+  turing-small-data:

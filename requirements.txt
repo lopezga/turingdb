@@ -1,0 +1,6 @@
+fastapi==0.115.12
+uvicorn==0.34.2
+neo4j==5.28.1
+httpx==0.28.1
+pydantic==2.11.4
+turingdb==3.1; sys_platform == 'linux'

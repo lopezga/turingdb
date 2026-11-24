@@ -1,0 +1,10 @@
+.git
+.venv
+.env
+data
+reports
+backups
+__pycache__
+tests
+.installer-test
+.setup

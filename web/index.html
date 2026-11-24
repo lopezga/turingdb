@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>GraphScope | Comparativa Neo4j y TuringDB</title><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/tabs.css"><link rel="stylesheet" href="/graph.css"></head>
+<body><main>
+<header><a class="brand" href="/">◈ GraphScope</a><span class="tag">PROYECTO DE DEMOSTRACIÓN</span></header>
+<section class="intro"><div class="eyebrow">COMPARATIVA DE GRAFOS</div><h1>Neo4j vs. TuringDB</h1><p>Demo de consultas y tiempos de respuesta.</p></section>
+<nav class="tabs" role="tablist" aria-label="Secciones de la demo">
+<button id="tab-full" role="tab" aria-selected="true" aria-controls="benchmark-panel" data-tab="full">Offshore Leaks · 2 millones</button>
+<button id="tab-small" role="tab" aria-selected="false" aria-controls="benchmark-panel" tabindex="-1" data-tab="small">Epinions · 75.879 nodos</button>
+<button id="tab-about" role="tab" aria-selected="false" aria-controls="about-panel" tabindex="-1" data-tab="about">Motores y tecnologías</button>
+</nav>
+<section id="benchmark-panel" role="tabpanel" aria-labelledby="tab-full">
+<div class="dataset-intro"><div><h2 id="dataset-title">Offshore Leaks</h2><p id="dataset-description"></p></div><div id="status" class="status" aria-live="polite">Comprobando conexiones…</div></div>
+<p id="dataset-note" class="dataset-note"></p>
+<section class="workspace"><div class="section-title"><h2>Consultar y comparar</h2><span id="dataset-source">ICIJ · OFFSHORE LEAKS</span></div>
+<form id="ask"><label for="question">Consulta en lenguaje natural</label><textarea id="question" required maxlength="500" placeholder="Escribe una pregunta o elige un ejemplo">¿Qué países tienen más entidades?</textarea><div class="controls"><label>Mediciones <select id="repetitions"><option>1</option><option selected>3</option><option>5</option><option>10</option></select></label><label>Calentamiento <select id="warmups"><option value="0">Sin calentamiento</option><option value="1" selected>1 ejecución</option><option value="2">2 ejecuciones</option></select></label><button id="submit">Comparar motores</button></div></form><div id="examples" class="examples"></div></section>
+<div id="message" role="status" aria-live="polite"></div>
+<section class="results" id="results"></section>
+<section id="details" hidden><details><summary>Consulta y metodología</summary><pre id="query"></pre><p id="method"></p></details><button id="download" class="secondary">Descargar medición JSON</button></section>
+</section>
+<section id="about-panel" role="tabpanel" aria-labelledby="tab-about" hidden>
+<section class="info-section"><div class="eyebrow">LOS MOTORES</div><h2>TuringDB y Neo4j: qué cambia</h2><p>Ambos almacenan nodos, relaciones y propiedades. Su arquitectura y la forma de ejecutar consultas son diferentes. El motor más rápido depende de la consulta, los índices, la memoria y la estructura del grafo.</p>
+<div class="table-wrap comparison-table"><table><thead><tr><th>Aspecto</th><th>TuringDB</th><th>Neo4j</th></tr></thead><tbody>
+<tr><th>Arquitectura</th><td>Motor en C++ con organización columnar en memoria y persistencia en disco.</td><td>Base de grafos persistente; combina almacenamiento, caché de páginas y heap de la JVM.</td></tr>
+<tr><th>Enfoque</th><td>Diseñado para análisis, lecturas y exploración de grafos.</td><td>Motor transaccional ACID para consultar y modificar grafos.</td></tr>
+<tr><th>Consultas</th><td>Dialecto de Cypher. La compatibilidad debe comprobarse para cada consulta y versión.</td><td>Cypher, con planificador, índices y restricciones configurables.</td></tr>
+<tr><th>Versionado</th><td>Cambios y commits con consulta de estados históricos integrados.</td><td>Las transacciones no equivalen al modelo de ramas y commits de TuringDB.</td></tr>
+<tr><th>En esta demo</th><td>SDK Python nativo sobre HTTP; misma consulta y parámetros que Neo4j.</td><td>Driver oficial Python sobre Bolt; índices de identidad para nodos y relaciones.</td></tr>
+<tr><th>Qué evaluamos</th><td colspan="2">Solo consultas de lectura del catálogo. No medimos escrituras, concurrencia, recuperación ni el versionado.</td></tr>
+</tbody></table></div>
+<p class="source-links">Documentación oficial: <a href="https://docs.turingdb.ai/concepts/overview" target="_blank" rel="noopener">arquitectura TuringDB</a> · <a href="https://docs.turingdb.ai/concepts/versioning_system" target="_blank" rel="noopener">versionado TuringDB</a> · <a href="https://neo4j.com/docs/cypher-manual/25/introduction/cypher-neo4j/" target="_blank" rel="noopener">Neo4j y Cypher</a> · <a href="https://neo4j.com/docs/operations-manual/current/performance/memory-configuration/" target="_blank" rel="noopener">memoria Neo4j</a>.</p>
+</section>
+<section class="info-section"><div class="eyebrow">LA COMPARACIÓN</div><h2>Cómo interpretar los tiempos</h2><p>Se ejecutan consultas equivalentes de forma secuencial y con orden alterno. Se separa la interpretación del lenguaje del tiempo del motor. Cada tiempo incluye transporte, driver y materialización de resultados; se muestran las muestras, la mediana y el p95.</p><p>Las cachés no se vacían. La igualdad se comprueba sobre las filas devueltas; un ranking limitado no representa todo el grafo. El catálogo permite de una a diez muestras: son mediciones de demostración, no una conclusión estadística general.</p><p>Cada dataset tiene su propio servicio de Neo4j y TuringDB, con los mismos límites por motor. Los servicios comparten el ordenador: no deben ejecutarse cargas ni otras comparaciones durante una medición. El bloqueo de la API impide dos comparaciones simultáneas.</p>
+<div class="callout"><strong>Dos tamaños, dos estructuras distintas.</strong> Offshore Leaks contiene registros empresariales históricos. Epinions es una red completa de confianza con 75.879 usuarios y 508.837 enlaces dirigidos. Compararlos permite explorar dos cargas, pero no aislar el efecto del tamaño ni reproducir por sí solo los grafos de una empresa.</div>
+</section>
+<section class="info-section"><div class="eyebrow">TECNOLOGÍAS DEL PROYECTO</div><h2>Qué utiliza esta demo</h2>
+<div class="tech-grid">
+<article><h3>Python y FastAPI</h3><p>Backend, API de consultas, validación con Pydantic y mediciones con reloj monotónico. Uvicorn sirve la aplicación.</p></article>
+<article><h3>HTML, CSS y JavaScript</h3><p>Interfaz sin framework, pestañas independientes, tablas de resultados y exportación JSON.</p></article>
+<article><h3>Grafos interactivos en SVG</h3><p>Visualizador común para los dos motores: nodos, relaciones dirigidas, zoom, movimiento e inspección de propiedades. Las lecturas visuales y la exploración adicional se hacen fuera de la medición.</p></article>
+<article><h3>Neo4j Community 5.26.0</h3><p>Un servicio por dataset, driver oficial de Python y protocolo Bolt.</p></article>
+<article><h3>TuringDB 3.1</h3><p>Un servicio por dataset y SDK Python nativo; resultados recibidos como DataFrames de pandas.</p></article>
+<article><h3>Ollama y Qwen2.5 3B</h3><p>Interpretación local por CPU. El modelo elige intención y parámetros de un catálogo; el backend compila consultas de lectura. Hay un modo sin LLM y un proveedor de API intercambiable.</p></article>
+<article><h3>Docker Compose y WSL2</h3><p>Servicios Linux y volúmenes persistentes. En Windows, Docker Desktop utiliza WSL2. Los servicios se arrancan manualmente.</p></article>
+<article><h3>JSONL y SHA-256</h3><p>Archivos comunes de importación y verificación íntegra de propiedades, identificadores y extremos de relaciones.</p></article>
+<article><h3>ICIJ y Stanford SNAP</h3><p>Datos reales con atribución y manifiestos de procedencia. Epinions contiene solo IDs y enlaces, sin nombres ni reseñas.</p></article>
+</div></section>
+</section>
+<footer><p id="attribution"></p><p id="data-disclaimer"></p><p>Proyecto de demostración. Los resultados dependen del dataset, la consulta y los recursos. El tiempo del intérprete se mide por separado.</p></footer>
+</main><script src="/graph.js"></script><script src="/app.js"></script><script src="/graph-integration.js"></script></body></html>

@@ -1,0 +1,36 @@
+[hidden]{display:none!important}
+body{font-size:16px}
+.intro{padding:42px 0 28px;background:none}
+h1{font-size:clamp(32px,4vw,49px);line-height:1.12;letter-spacing:-1.5px;margin:16px 0}
+.intro>p{margin-bottom:0}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;border-bottom:1px solid #cbd6cd;margin:0 0 28px;padding:0 0 10px}
+.tabs button{background:transparent;color:#496159;font-size:14px;font-weight:500;padding:12px 16px;border:1px solid transparent}
+.tabs button[aria-selected=true]{background:#183e35;color:#fff}
+.tabs button:hover{border-color:#7c9c86}
+button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #629377;outline-offset:3px}
+.dataset-intro{display:flex;justify-content:space-between;gap:20px;align-items:start}
+.dataset-intro h2{font-size:23px}
+.dataset-intro p{max-width:600px;margin:10px 0;color:#526568;font-size:15px;line-height:1.6}
+.dataset-intro .status{margin-top:0;justify-content:flex-end;max-width:410px;font-size:13px}
+.dataset-note{color:#53685c;font-size:14px;line-height:1.6;border-left:3px solid #93b69a;padding-left:14px;margin:16px 0 26px}
+label,button{font-size:14px}
+.examples button{font-size:13px;padding:9px 12px}
+.meta,.empty{font-size:14px}
+.pill{font-size:13px}
+.table-wrap table{font-size:14px}
+.info-section{margin-bottom:24px;padding:28px;background:#fff;border:1px solid #dce2da;border-radius:12px}
+.info-section h2{font-size:26px;margin:12px 0 20px}
+.info-section p{line-height:1.7;max-width:1000px;color:#425b54}
+.info-section .eyebrow{font-size:12px}
+.comparison-table{max-height:none}
+.comparison-table th,.comparison-table td{white-space:normal;line-height:1.6;vertical-align:top;min-width:160px;padding:15px}
+.comparison-table th:first-child{min-width:135px;width:18%}
+.source-links{font-size:14px}.source-links a{color:#28684f}
+.callout{background:#e9f1e8;border-left:3px solid #5e9463;border-radius:5px;padding:18px;line-height:1.7;color:#355744}
+.tech-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.tech-grid article{padding:20px;background:#f5f8f4;border:1px solid #e0e7df;border-radius:8px}
+.tech-grid h3{font:600 18px 'Space Grotesk',sans-serif;margin:0 0 10px}
+.tech-grid p{margin:0;font-size:15px}
+footer{font-size:13px}
+select{appearance:none;padding-right:30px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%2338514a' stroke-width='2'/%3E%3C/svg%3E");background-position:right 10px center;background-repeat:no-repeat}
+@media(max-width:800px){.dataset-intro{display:block}.dataset-intro .status{justify-content:flex-start;max-width:none;margin-top:14px}.tabs button{padding:10px}.tech-grid{grid-template-columns:1fr}.info-section{padding:20px}}

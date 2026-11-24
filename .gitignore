@@ -1,0 +1,19 @@
+.env
+.venv/
+__pycache__/
+data/
+backups/
+reports/
+*.log
+.installer-test/
+.setup/
+
+# Local archives may contain credentials and generated datasets.
+*.zip
+*.tar
+*.tar.gz
+*.7z
+.env.*
+!.env.example
+*.pem
+*.key

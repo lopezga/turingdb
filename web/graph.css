@@ -1,0 +1,27 @@
+.result-switch{display:flex;gap:6px;margin:18px 0 0;border-bottom:1px solid #dce5dc;padding-bottom:10px}
+.result-switch button{background:#eef3ee;color:#35554a;padding:8px 16px;font-size:14px}
+.result-switch button[aria-pressed=true]{background:#234e40;color:#fff}
+.graph-host{margin-top:12px;min-width:0}
+.graph-description,.graph-help{font-size:13px;line-height:1.6;color:#536a60}
+.graph-warning{font-size:14px;color:#89592c;background:#fff2dd;padding:10px;border-radius:6px}
+.graph-toolbar{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin:14px 0 10px}
+.graph-toolbar button{padding:6px 11px;background:white;color:#28513e;border:1px solid #bfcec2;font-size:15px}
+.graph-count{font-size:13px;color:#486254;margin-right:auto}
+.graph-label-option{display:flex;align-items:center;gap:5px;font-size:13px}
+.graph-label-option input{accent-color:#285a46}
+.network-svg{display:block;width:100%;height:420px;border:1px solid #d6e2d5;border-radius:8px;background:radial-gradient(circle at center,#fbfdf9,#f0f5ee);touch-action:none;cursor:grab}
+.network-svg:active{cursor:grabbing}
+.network-svg:focus-visible{outline:2px solid #4f8c6a;outline-offset:2px}
+.graph-node{cursor:pointer}.graph-node text{font:13px 'DM Sans',sans-serif;fill:#284437;paint-order:stroke;stroke:#f6faf4;stroke-width:3px;pointer-events:none}
+.graph-node:focus-visible circle{stroke:#193b2c;stroke-width:4px}
+.graph-edge-hit{cursor:pointer}
+.graph-legend{display:flex;flex-wrap:wrap;gap:12px;font-size:13px;margin:12px 0;color:#496052}
+.graph-legend span{display:inline-flex;gap:6px;align-items:center}.graph-legend i{display:inline-block;width:10px;height:10px;border-radius:50%}
+.graph-inspector{background:#f5f8f2;border:1px solid #dce5d7;border-radius:7px;padding:14px;margin-top:14px;font-size:14px}
+.graph-inspector h4{margin:0 0 12px;font:600 17px 'Space Grotesk',sans-serif;overflow-wrap:anywhere}
+.graph-inspector dl{display:grid;grid-template-columns:minmax(65px,100px) 1fr;gap:6px 12px;margin:12px 0}
+.graph-inspector dt{color:#5d7166}.graph-inspector dd{margin:0;overflow-wrap:anywhere}
+.graph-inspector .secondary{margin-top:8px}
+.graph-load-error{color:#9b432a;font-size:14px}
+.graph-loading{font-size:14px;color:#5c7567;padding:18px 0}
+@media(max-width:800px){.network-svg{height:350px}.graph-toolbar{gap:5px}.graph-label-option{width:100%}.graph-count{width:100%}}
