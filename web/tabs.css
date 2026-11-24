@@ -31,6 +31,12 @@ label,button{font-size:14px}
 .tech-grid article{padding:20px;background:#f5f8f4;border:1px solid #e0e7df;border-radius:8px}
 .tech-grid h3{font:600 18px 'Space Grotesk',sans-serif;margin:0 0 10px}
 .tech-grid p{margin:0;font-size:15px}
+.engine-strengths{margin:28px 0}
+.engine-strengths>h3{font-size:21px;margin:0 0 16px}
+.engine-strengths h4{font:600 19px 'Space Grotesk',sans-serif;margin:0 0 16px;color:#183e35}
+.engine-strengths .tech-grid p+p{margin-top:12px}
+.strength-example{border-top:1px solid #dce2da;padding-top:12px}
+.engine-strengths .strength-note{font-size:14px;margin:16px 0 8px}
 footer{font-size:13px}
 select{appearance:none;padding-right:30px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%2338514a' stroke-width='2'/%3E%3C/svg%3E");background-position:right 10px center;background-repeat:no-repeat}
 @media(max-width:800px){.dataset-intro{display:block}.dataset-intro .status{justify-content:flex-start;max-width:none;margin-top:14px}.tabs button{padding:10px}.tech-grid{grid-template-columns:1fr}.info-section{padding:20px}}

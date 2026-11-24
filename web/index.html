@@ -20,6 +20,14 @@
 </section>
 <section id="about-panel" role="tabpanel" aria-labelledby="tab-about" hidden>
 <section class="info-section"><div class="eyebrow">LOS MOTORES</div><h2>TuringDB y Neo4j: qué cambia</h2><p>Ambos almacenan nodos, relaciones y propiedades. Su arquitectura y la forma de ejecutar consultas son diferentes. El motor más rápido depende de la consulta, los índices, la memoria y la estructura del grafo.</p>
+<section class="engine-strengths" aria-labelledby="strengths-title"><h3 id="strengths-title">Cuándo puede destacar cada motor</h3>
+<div class="tech-grid">
+<article><h4>Neo4j · consultas puntuales</h4><p><strong>Cuándo:</strong> localizar un nodo concreto y consultar unas pocas conexiones.</p><p><strong>Por qué:</strong> puede utilizar un índice para encontrar el nodo y seguir sus relaciones, leyendo solo una parte pequeña del grafo.</p><p class="strength-example"><strong>Ejemplo:</strong> «Dame los proveedores de esta empresa».</p></article>
+<article><h4>TuringDB · análisis de muchos datos</h4><p><strong>Cuándo:</strong> calcular rankings, agrupaciones o analizar una parte grande del grafo.</p><p><strong>Por qué:</strong> organiza las propiedades en columnas y procesa muchos valores juntos. Esto aprovecha mejor la caché de la CPU y las instrucciones que operan sobre varios valores a la vez, reduciendo el trabajo por dato.</p><p class="strength-example"><strong>Ejemplo:</strong> «Calcula qué proveedores tienen más conexiones en toda la red».</p></article>
+</div>
+<p class="strength-note">Son ventajas esperables, no garantías. Importa cuántos datos toca realmente la consulta, además de los índices, la memoria y las conexiones del grafo. Con 70.000 nodos, ambos pueden destacar en tareas distintas. Los ejemplos ilustran casos de uso; el catálogo actual de la demo no incluye consultas específicas de proveedores.</p>
+<p class="source-links">Más información: <a href="https://neo4j.com/docs/cypher-manual/current/indexes/performance-indexes/using-indexes/" target="_blank" rel="noopener">índices de Neo4j</a> · <a href="https://docs.turingdb.ai/concepts/columnar_storage" target="_blank" rel="noopener">almacenamiento columnar de TuringDB</a>.</p>
+</section>
 <div class="table-wrap comparison-table"><table><thead><tr><th>Aspecto</th><th>TuringDB</th><th>Neo4j</th></tr></thead><tbody>
 <tr><th>Arquitectura</th><td>Motor en C++ con organización columnar en memoria y persistencia en disco.</td><td>Base de grafos persistente; combina almacenamiento, caché de páginas y heap de la JVM.</td></tr>
 <tr><th>Enfoque</th><td>Diseñado para análisis, lecturas y exploración de grafos.</td><td>Motor transaccional ACID para consultar y modificar grafos.</td></tr>
